@@ -1,0 +1,53 @@
+:root {
+  --color-text: #666;
+  --color-high-text: #42bbaa;
+  --color-tint: #42b983;
+  --color-background: #ffffff;
+  --font-size: 14px;
+  --line-height:1.5;
+  
+}
+/* 以下改变的是vant组件的样式 */
+:root {
+/* Tabbar 标签栏 */
+--van-tabbar-background-color:#f6f6f6 !important;
+--van-tabbar-item-active-background-color:#f6f6f6 !important;
+--van-tabbar-item-active-color:#42bbaa !important;
+/* NavBar 导航栏 */
+--van-nav-bar-background-color:#42b983 !important;
+--van-nav-bar-icon-color:white !important;
+--van-nav-bar-text-color:white !important;
+--van-nav-bar-arrow-size: 20px !important;
+--van-nav-bar-title-text-color: white !important;
+--van-nav-bar-title-font-size: 18px !important;
+/* Tab 标签页 */
+--van-tabs-bottom-bar-color: #42b983 !important;
+}
+
+*,
+*::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  user-select: none;
+  background: var(--color-background);
+  color: var(--color-text);
+  width: 100vw;
+}
+
+a {
+  color:var(--color-text);
+  text-decoration: none;
+}
+
+
+/* 兼容webkit和firefox浏览器的去除滚动条 */
+*::-webkit-scrollbar {
+  display: none;
+}
+*{
+  scrollbar-width: none;
+}

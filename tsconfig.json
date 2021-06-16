@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "strict": true,
+    "strict": false,
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
@@ -17,6 +17,18 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "images/*": [
+        "src/assets/images/*"
+      ],
+      "components/*": [
+        "src/components/*"
+      ],
+      "views/*": [
+        "src/views/*"
+      ],
+      "api/*": [
+        "src/api/*"
       ]
     },
     "lib": [
