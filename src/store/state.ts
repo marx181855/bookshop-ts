@@ -1,6 +1,6 @@
 const state = {
   user: {
-    isLogin: !!window.localStorage.getItem('token')
+    isLogin: !!window.localStorage.getItem('bookshopToken')
   },
   shopCartCount: 0
 }

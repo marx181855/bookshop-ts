@@ -33,7 +33,7 @@ import {
   editAddress,
   deleteAddress,
   getAddressDetail
-} from 'network/address'
+} from 'api/address'
 
 export default defineComponent({
 
@@ -117,7 +117,7 @@ export default defineComponent({
     }
 
     const onDelete = () => {
-      deleteAddress(state.addressId).then((res) => {
+      deleteAddress(state.addressId).then(() => {
         Toast('删除成功')
         setTimeout(() => {
           router.back()

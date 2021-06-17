@@ -10,10 +10,10 @@ function request(config) {
   // 请求拦截
   instance.interceptors.request.use(config => {
     // 如果有一些接口需要认证才可以访问，就在这里统一设置
-    const token = window.localStorage.getItem('token')
+    const bookshopToken = window.localStorage.getItem('bookshopToken')
 
-    if (token) {
-      config.headers.Authorization = 'Bearer ' + token
+    if (bookshopToken) {
+      config.headers.Authorization = 'Bearer ' + bookshopToken
     }
     // 直接放行
     return config

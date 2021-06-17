@@ -202,19 +202,25 @@ export default defineComponent({
     const getCategoryGoodsList = (categoryId) => {
       state.currentCategoryId = categoryId
       console.log('当前的categoryId：' + categoryId)
-      getCategoryGoods(state.currentActiveTab, state.currentCategoryId).then((res) => {
-        state.goodsData[state.currentActiveTab].list = res.goods.data
-        nextTick(() => {
-          // 重新计算高度
-          betterScroll && betterScroll.refresh()
-        })
+      getCategoryGoods('sales', state.currentCategoryId).then((res) => {
+        state.goodsData.sales.list = res.goods.data
+      })
+      getCategoryGoods('price', state.currentCategoryId).then((res) => {
+        state.goodsData.price.list = res.goods.data
+      })
+      getCategoryGoods('comments_count', state.currentCategoryId).then((res) => {
+        state.goodsData.comments_count.list = res.goods.data
+      })
+      nextTick(() => {
+        // 重新计算高度
+        betterScroll && betterScroll.refresh()
       })
     }
 
     const backToTop = () => {
       betterScroll.scrollTo(0, 0, 500)
     }
-
+    
     return {
       ...toRefs(state),
       onSearch,

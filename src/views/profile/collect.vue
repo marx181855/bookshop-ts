@@ -60,7 +60,7 @@ export default defineComponent({
       initData()
     })
     const goToGoodDetai = (id) => {
-      router.push({ path: '/detail', query: { id } })
+      router.push({ path: '/goodDetail', query: { id } })
     }
     const deleteCollect = (id) => {
       console.log('删除了')

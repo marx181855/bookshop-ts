@@ -110,7 +110,25 @@ const routes:Array<RouteRecordRaw> = [
       title: '用户收藏',
       isAuthRequired: true
     }
-  }
+  },
+  {
+    path: '/address',
+    name: 'address',
+    component: () => import('views/address/address.vue'),
+    meta: {
+      title: '地址管理',
+      isAuthRequired: true
+    }
+  },
+  {
+    path: '/addressEdit',
+    name: 'addressEdit',
+    component: () => import('views/address/addressEdit.vue'),
+    meta: {
+      title: '地址编辑',
+      isAuthRequired: true
+    }
+  },
 ]
 
 export default routes

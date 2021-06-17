@@ -74,7 +74,7 @@ import { submitOrder, orderPreview } from 'api/order'
 import { getPaymentStatus, getPaymentQRCode } from 'api/pay'
 
 export default defineComponent({
-
+  name: 'createOrder',
   setup() {
     const router = useRouter()
     const store = useStore()
@@ -163,7 +163,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .create-order {
   background: #f9f9f9;
   .address-wrap {
@@ -171,8 +171,6 @@ export default defineComponent({
     text-align: left;
     margin-bottom: 20px;
     background: #fff;
-    position: fixed;
-    margin-top: 44px;
     font-size: 14px;
     padding: 15px;
     color: #222333;

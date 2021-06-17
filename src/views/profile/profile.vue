@@ -77,8 +77,8 @@ export default defineComponent({
         console.log(res)
         if (res.status === 204) {
           Toast.success('退出成功')
-          // 清除token
-          window.localStorage.setItem('token', '')
+          // 清除bookshopToken
+          window.localStorage.setItem('bookshopToken', '')
           store.commit('setIsLogin', false)
           store.state.shopCartCount = 0 
           setTimeout(() => {

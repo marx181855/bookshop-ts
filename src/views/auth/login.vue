@@ -71,8 +71,8 @@ export default defineComponent({
       console.log("submit", values);
       login(userInfo)
         .then((res) => {
-          // 将token保存在本地window.localStorage setItem(key, value) getItem(key)
-          window.localStorage.setItem("token", res.access_token);
+          // 将bookshopToken保存在本地window.localStorage setItem(key, value) getItem(key)
+          window.localStorage.setItem("bookshopToken", res.access_token);
           // 在vuex isLogin
           store.commit("setIsLogin", true);
           store.dispatch("updateCart");

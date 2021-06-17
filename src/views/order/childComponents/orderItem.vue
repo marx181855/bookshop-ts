@@ -32,6 +32,7 @@
       desc="全场包邮"
       :title="item.goods.title"
       :thumb="item.goods.cover_url"
+      @click="$router.push({ path: '/goodDetail', query: { id:item.goods.id } })"
     />
   </div>
 </template>

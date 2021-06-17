@@ -1,5 +1,6 @@
 <template>
   <div class="shopCart-container">
+    
     <van-nav-bar
       title="购物车"
       left-text="返回"
@@ -7,11 +8,12 @@
       @click-left="$router.go(-1)"
     >
     </van-nav-bar>
+    <keep-alive>
     <div class="cart-box" v-if="list.length">
       <van-checkbox-group
-        @change="groupChange"
+        @change="changeCheckboxStatus"
         ref="checkboxGroup"
-        v-model="result"
+        v-model="checkboxSelectResult"
       >
         <van-swipe-cell
           :right-width="50"
@@ -20,8 +22,8 @@
         >
           <div class="good-item">
             <van-checkbox :name="item.id" />
-            <div class="good-img">
-              <img :src="item.goods.cover_url" alt />
+            <div class="good-img" @click="$router.push({ path: '/goodDetail', query: { id:item.goods.id } })">
+              <img :src="item.goods.cover_url" />
             </div>
             <div class="good-desc">
               <div class="good-title">
@@ -40,7 +42,7 @@
                   :model-value="item.num"
                   :name="item.id"
                   async-change
-                  @change="onChange"
+                  @change="changeShopCartCount"
                 />
               </div>
             </div>
@@ -57,14 +59,17 @@
         </van-swipe-cell>
       </van-checkbox-group>
     </div>
+    </keep-alive>
     <van-submit-bar
       v-if="list.length"
       class="submit-all"
-      :price="total * 100"
+      :price="totalPrice * 100"
       button-text="结算"
       @submit="onSubmit"
     >
-      <van-checkbox @click="allCheck" v-model="checkAll">全选</van-checkbox>
+      <van-checkbox @click="checkAllCheckbox" v-model="isCheckAllCheckbox"
+        >全选</van-checkbox
+      >
     </van-submit-bar>
     <div class="empty" v-if="!list.length">
       <img
@@ -73,7 +78,12 @@
         alt="空购物车"
       />
       <div class="title">购物车空空如也</div>
-      <van-button round color="#1baeae" type="primary" black @click="goTo"
+      <van-button
+        round
+        color="#1baeae"
+        type="primary"
+        black
+        @click="$router.push({ path: '/' })"
         >前往选购</van-button
       >
     </div>
@@ -93,18 +103,18 @@ import { defineComponent, onMounted, reactive, toRefs, computed } from "vue";
 import { Toast } from "vant";
 
 export default defineComponent({
+  name: 'shopCart',
   setup() {
     const router = useRouter();
     const store = useStore();
     // 数据模型，状态
     const state = reactive({
       list: [],
-      result: [],
-      checkAll: true,
+      checkboxSelectResult: [],
+      isCheckAllCheckbox: false,
     });
-    // const checkAll = ref(true)
-    // 初始化购物车数据
-    const init = () => {
+
+    const initData = () => {
       Toast.loading({
         message: "加载中...",
         forbidClick: true,
@@ -112,47 +122,51 @@ export default defineComponent({
       getCartList("include=goods").then((res) => {
         console.log(res);
         state.list = res.data;
-        state.result = res.data
+        state.checkboxSelectResult = res.data
           .filter((n) => n.is_checked === 1)
           .map((item) => item.id);
-        console.log(state.result);
+        if (state.checkboxSelectResult.length === state.list.length) {
+          state.isCheckAllCheckbox = true;
+        } else {
+          state.isCheckAllCheckbox = false;
+        }
+        console.log(state.checkboxSelectResult);
         Toast.clear();
       });
     };
-
+    onMounted(() => {
+      initData();
+    });
     // 复选框改变处理
-    const groupChange = (result) => {
-      if (result.length === state.list.length) {
-        state.checkAll = true;
+    const changeCheckboxStatus = (checkboxSelectResult) => {
+      if (checkboxSelectResult.length === state.list.length) {
+        state.isCheckAllCheckbox = true;
       } else {
-        state.checkAll = false;
+        state.isCheckAllCheckbox = false;
       }
-      console.log({ cart_ids: result });
-      // 改变数据表的选中状态
-      checkedCart({ cart_ids: result });
-      state.result = result;
+      console.log({ cart_ids: checkboxSelectResult });
+      // 改变购物车的选中状态
+      checkedCart({ cart_ids: checkboxSelectResult });
+      state.checkboxSelectResult = checkboxSelectResult;
     };
-    const allCheck = () => {
-      if (state.checkAll) {
-        state.result = state.list.map((item) => item.id);
+    const checkAllCheckbox = () => {
+      if (state.isCheckAllCheckbox) {
+        state.checkboxSelectResult = state.list.map((item) => item.id);
       } else {
-        state.result = [];
+        state.checkboxSelectResult = [];
       }
     };
-    // 前往购物
-    const goTo = () => {
-      router.push({ path: "/" });
-    };
+
     // 删除商品
-    const deleteGood = (id) => {
-      deleteCartItem(id).then((res) => {
-        init();
+    const deleteGood = (id: number) => {
+      deleteCartItem(id).then(() => {
+        initData();
         // 改变vuex中的状态数量
         store.dispatch("updateCart");
       });
     };
     // 异步改变购物车数量
-    const onChange = (value, detail) => {
+    const changeShopCartCount = (value, detail) => {
       Toast.loading({
         message: "修改中...",
         forbidClick: true,
@@ -168,14 +182,11 @@ export default defineComponent({
         console.log(res);
       });
     };
-    onMounted(() => {
-      init();
-    });
-    // 通过计算熟悉计算总价
-    const total = computed(() => {
+
+    const totalPrice = computed(() => {
       let sum = 0;
       state.list
-        .filter((item) => state.result.includes(item.id))
+        .filter((item) => state.checkboxSelectResult.includes(item.id))
         .forEach((item) => {
           sum += parseInt(item.num) * parseFloat(item.goods.price);
         });
@@ -183,7 +194,7 @@ export default defineComponent({
     });
     // 创建订单
     const onSubmit = () => {
-      if (state.result.length === 0) {
+      if (state.checkboxSelectResult.length === 0) {
         Toast.fail("请选择商品进行结算");
         return "";
       } else {
@@ -192,12 +203,11 @@ export default defineComponent({
     };
     return {
       ...toRefs(state),
-      goTo,
-      onChange,
-      groupChange,
-      allCheck,
+      changeShopCartCount,
+      changeCheckboxStatus,
+      checkAllCheckbox,
       deleteGood,
-      total,
+      totalPrice,
       onSubmit,
     };
   },
