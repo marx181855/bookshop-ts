@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@vant/touch-emulator';
-import { Tabbar, TabbarItem,NavBar,Icon,Swipe, SwipeItem, Lazyload,Grid, GridItem,Tab, Tabs  } from 'vant'
+import { Tabbar, TabbarItem,NavBar,Icon,Swipe, SwipeItem, Lazyload,Grid, GridItem,Tab, Tabs,Image ,Card,Tag ,ActionBar, ActionBarIcon, ActionBarButton,Form, Field,Button,Search ,Sidebar, SidebarItem,Collapse, CollapseItem,Checkbox, CheckboxGroup,SubmitBar ,Stepper ,SwipeCell,AddressList ,AddressEdit,Popup     } from 'vant'
 
 createApp(App)
 .use(Tabbar)
@@ -19,9 +19,28 @@ createApp(App)
 .use(GridItem)
 .use(Tab)
 .use(Tabs)
-
-
-
+.use(Image)
+.use(Card)
+.use(Tag)
+.use(ActionBar)
+.use(ActionBarIcon)
+.use(ActionBarButton)
+.use(Form)
+.use(Field)
+.use(Button)
+.use(Search)
+.use(Sidebar)
+.use(SidebarItem)
+.use(Collapse)
+.use(CollapseItem)
+.use(Checkbox)
+.use(CheckboxGroup)
+.use(SubmitBar)
+.use(Stepper)
+.use(SwipeCell )
+.use(AddressList)
+.use(AddressEdit)
+.use(Popup)
   .use(store)
   .use(router)
   .mount('#app')

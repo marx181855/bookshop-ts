@@ -6,15 +6,15 @@ export function getCategoryData() {
   })
 }
 
-export function getCategoryGoods(order = 'sales', cid = 0, page = 1) {
+export function getCategoryGoods(orderType = 'sales', categoryId = 0, page = 1) {
   return request({
-    url: `/api/goods?category_id=${cid}&page=${page}&${order}=1`
+    url: `/api/goods?category_id=${categoryId}&page=${page}&${orderType}=1`
 
   })
 }
 
-export function searchProduct(title:string, order = 'sales', cid = 0, page = 1) {
+export function searchProduct(title:string, orderType = 'sales', categoryId = 0, page = 1) {
   return request({
-    url: `/api/goods?category_id=${cid}&page=${page}&${order}=1&title=${title}`
+    url: `/api/goods?category_id=${categoryId}&page=${page}&${orderType}=1&title=${title}`
   })
 }

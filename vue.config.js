@@ -4,8 +4,9 @@ const tsImportPluginFactory = require("ts-import-plugin");
 module.exports = {
   lintOnSave: true,
   productionSourceMap: false,
-  // vant组件typescript按需引入
+  publicPath: process.env.NODE_ENV === 'production' ? '/bookshop-ts/dist/' : '/',
   chainWebpack: config => {
+    // vant组件typescript按需引入
     config.module
       .rule("ts")
       .use("ts-loader")
@@ -27,6 +28,18 @@ module.exports = {
         });
         return options;
       });
+    // 生产模式去除console
+    config.optimization
+      .minimizer('terser')
+      .tap(args => {
+        Object.assign(args[0].terserOptions.compress, { // 生产模式 console.log 去除
+          // warnings: false , // 默认 false
+          // drop_console:  ,
+          // drop_debugger: true, // 默认也是true
+          pure_funcs: ['console.log']
+        })
+        return args
+      })
   },
   configureWebpack: {
     resolve: {
@@ -36,8 +49,10 @@ module.exports = {
         assets: '@/assets',
         components: '@/components',
         api: '@/api',
-        views: '@/views'
+        views: '@/views',
+        hooks: '@/hooks'
       }
     }
-  }
+  },
+
 };

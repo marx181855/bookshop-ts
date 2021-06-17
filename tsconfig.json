@@ -29,6 +29,9 @@
       ],
       "api/*": [
         "src/api/*"
+      ],
+      "hooks/*": [
+        "src/hooks/*"
       ]
     },
     "lib": [
