@@ -68,7 +68,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted, toRefs } from "vue";
+import {
+  defineComponent,
+  ref,
+  reactive,
+  onMounted,
+  toRefs,
+  onActivated,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { Toast } from "vant";
@@ -98,7 +105,7 @@ export default defineComponent({
       text: "",
     });
     let goodID = ref(0);
-    onMounted(() => {
+    const initData = () => {
       Toast.loading({
         message: "加载中...",
         forbidClick: true,
@@ -119,6 +126,9 @@ export default defineComponent({
         }
         console.log(res);
       });
+    };
+    onMounted(() => {
+      initData();
     });
     // 收藏
     const handleCollect = () => {
@@ -161,6 +171,12 @@ export default defineComponent({
         }
       });
     };
+    onActivated(() => {
+      initData();
+
+      console.log("我是商品", route.query.id);
+      console.log(book.detail);
+    });
     return {
       ...toRefs(book),
       currentTab,
@@ -173,12 +189,14 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .box {
   overflow: auto;
   position: fixed;
   top: 45px;
   bottom: 50px;
+  left: 0;
+  right: 0;
   .van-image {
     width: 375px;
     height: 375px;

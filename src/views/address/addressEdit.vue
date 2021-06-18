@@ -135,7 +135,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .van-address-edit {
   background-color: #f7f8fa;
   position: fixed;

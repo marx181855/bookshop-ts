@@ -98,7 +98,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss" scoped>
 .link-register {
   font-size: 14px;
   margin-bottom: 20px;

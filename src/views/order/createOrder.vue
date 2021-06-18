@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { defineComponent, computed, onMounted, reactive, toRefs } from 'vue'
+import { defineComponent, computed, onMounted, reactive, toRefs, onActivated } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
@@ -92,6 +92,7 @@ export default defineComponent({
         forbidClick: true
       })
       orderPreview().then((res) => {
+        Toast.clear()
         let address = res.address.filter((n) => n.is_default === 1)
         console.log(!address.length)
         if (address.length === 0) {
@@ -106,6 +107,9 @@ export default defineComponent({
       })
     }
     onMounted(() => {
+      initData()
+    })
+    onActivated(() => {
       initData()
     })
     const goTo = () => {

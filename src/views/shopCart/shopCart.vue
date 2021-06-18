@@ -1,6 +1,5 @@
 <template>
   <div class="shopCart-container">
-    
     <van-nav-bar
       title="购物车"
       left-text="返回"
@@ -9,56 +8,64 @@
     >
     </van-nav-bar>
     <keep-alive>
-    <div class="cart-box" v-if="list.length">
-      <van-checkbox-group
-        @change="changeCheckboxStatus"
-        ref="checkboxGroup"
-        v-model="checkboxSelectResult"
-      >
-        <van-swipe-cell
-          :right-width="50"
-          v-for="(item, index) in list"
-          :key="index"
+      <div class="cart-box" v-if="list.length">
+        <van-checkbox-group
+          @change="changeCheckboxStatus"
+          ref="checkboxGroup"
+          v-model="checkboxSelectResult"
         >
-          <div class="good-item">
-            <van-checkbox :name="item.id" />
-            <div class="good-img" @click="$router.push({ path: '/goodDetail', query: { id:item.goods.id } })">
-              <img :src="item.goods.cover_url" />
-            </div>
-            <div class="good-desc">
-              <div class="good-title">
-                <span>{{ item.goods.title }}</span>
-                <span>x{{ item.goods.stock }}</span>
+          <van-swipe-cell
+            :right-width="50"
+            v-for="(item, index) in list"
+            :key="index"
+          >
+            <div class="good-item">
+              <van-checkbox :name="item.id" />
+              <div
+                class="good-img"
+                @click="
+                  $router.push({
+                    path: '/goodDetail',
+                    query: { id: item.goods.id },
+                  })
+                "
+              >
+                <img :src="item.goods.cover_url" />
               </div>
-              <div class="good-btn">
-                <div class="price">
-                  <small>￥</small>
-                  {{ item.goods.price + ".00" }}
+              <div class="good-desc">
+                <div class="good-title">
+                  <span>{{ item.goods.title }}</span>
+                  <span>x{{ item.goods.stock }}</span>
                 </div>
-                <van-stepper
-                  integer
-                  :min="1"
-                  :max="item.goods.stock"
-                  :model-value="item.num"
-                  :name="item.id"
-                  async-change
-                  @change="changeShopCartCount"
-                />
+                <div class="good-btn">
+                  <div class="price">
+                    <small>￥</small>
+                    {{ item.goods.price + ".00" }}
+                  </div>
+                  <van-stepper
+                    integer
+                    :min="1"
+                    :max="item.goods.stock"
+                    :model-value="item.num"
+                    :name="item.id"
+                    async-change
+                    @change="changeShopCartCount"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <template #right>
-            <van-button
-              square
-              icon="delete"
-              type="danger"
-              class="delete-button"
-              @click="deleteGood(item.id)"
-            />
-          </template>
-        </van-swipe-cell>
-      </van-checkbox-group>
-    </div>
+            <template #right>
+              <van-button
+                square
+                icon="delete"
+                type="danger"
+                class="delete-button"
+                @click="deleteGood(item.id)"
+              />
+            </template>
+          </van-swipe-cell>
+        </van-checkbox-group>
+      </div>
     </keep-alive>
     <van-submit-bar
       v-if="list.length"
@@ -99,11 +106,11 @@ import {
   checkedCart,
   deleteCartItem,
 } from "api/shopCart";
-import { defineComponent, onMounted, reactive, toRefs, computed } from "vue";
+import { defineComponent, onMounted, reactive, toRefs, computed, onActivated } from "vue";
 import { Toast } from "vant";
 
 export default defineComponent({
-  name: 'shopCart',
+  name: "shopCart",
   setup() {
     const router = useRouter();
     const store = useStore();
@@ -120,6 +127,7 @@ export default defineComponent({
         forbidClick: true,
       });
       getCartList("include=goods").then((res) => {
+        Toast.clear();
         console.log(res);
         state.list = res.data;
         state.checkboxSelectResult = res.data
@@ -131,12 +139,14 @@ export default defineComponent({
           state.isCheckAllCheckbox = false;
         }
         console.log(state.checkboxSelectResult);
-        Toast.clear();
       });
     };
     onMounted(() => {
       initData();
     });
+    onActivated(() => {
+      initData()
+    })
     // 复选框改变处理
     const changeCheckboxStatus = (checkboxSelectResult) => {
       if (checkboxSelectResult.length === state.list.length) {

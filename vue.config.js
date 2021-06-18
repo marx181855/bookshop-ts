@@ -2,6 +2,7 @@ const merge = require("webpack-merge");
 const tsImportPluginFactory = require("ts-import-plugin");
 
 module.exports = {
+  parallel: false,
   lintOnSave: true,
   productionSourceMap: false,
   publicPath: process.env.NODE_ENV === 'production' ? '/bookshop-ts/dist/' : '/',

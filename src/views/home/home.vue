@@ -158,7 +158,7 @@ export default defineComponent({
     });
 
     const goodsList = computed(() => {
-      console.log(state.currentActiveTab)
+      console.log(state.currentActiveTab);
       console.log(state.goodsData[state.currentActiveTab].list);
       return state.goodsData[state.currentActiveTab].list;
     });
@@ -174,7 +174,6 @@ export default defineComponent({
       console.log("回到顶部");
       betterScroll.scrollTo(0, 0, 500);
     };
-
     return {
       ...toRefs(state),
       bannerRef,
