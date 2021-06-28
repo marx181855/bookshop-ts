@@ -83,7 +83,6 @@ export default defineComponent({
       setDefaultAddress(item.id).then(res => {
         console.log(res)
       })
-      // router.push({ path: 'createorder', query: { addressId: item.id } })
     }
 
     return {

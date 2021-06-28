@@ -1,28 +1,24 @@
 <template>
   <div class="good-list">
-    <van-grid :column-num="2" icon-size="170px">
-      <van-grid-item
-        v-for="(item, index) in list"
-        :key="index"
-        :icon="item.cover_url"
-        @click="$router.push({ path: '/goodDetail', query: { id: item.id } })"
+    <div
+      class="card"
+      v-for="item in list"
+      :key="item.id"
+      @click="goToDetailPage(item.id)"
+    >
+      <img v-lazy="item.cover_url" alt="图片" />
+      <div class="title">{{ item.title }}</div>
+      <span class="price">￥{{ item.price }}</span>
+      <span class="collect"
+        ><van-icon name="star-o" />{{ item.collects_count }}</span
       >
-        <template #text>
-          <div class="good-info">
-            <p>{{ item.title }}</p>
-            <span class="price">￥{{ item.price }}</span>
-            <span class="collect"
-              ><van-icon name="star-o" />{{ item.collects_count }}</span
-            >
-          </div>
-        </template>
-      </van-grid-item>
-    </van-grid>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, inject, PropType } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 interface GoodProps {
   id: number;
@@ -41,26 +37,43 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+    const router = useRouter()
+    const route = useRoute();
+    const goToDetailPage = (id) => {
+      console.log(route.fullPath)
+      router.push({ path: '/goodDetail', query: { id} })
+    }
+    return {
+      goToDetailPage
+    };
   },
 });
 </script>
 
 <style lang="scss" scoped>
 .good-list {
-  .good-info {
-    p {
+  display: flex;
+  flex-wrap: wrap;
+  .card {
+    flex: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    img {
+      flex: 100%;
+      width: 100%;
+    }
+    .title {
+      flex: 100%;
       font-size: 14px;
     }
     .price {
+      flex: 50%;
       color: red;
-      margin-right: 10px;
+      padding-left: 30px;
     }
     .collect {
-      .van-icon {
-        font-weight: bold;
-        padding: 2px;
-      }
+      flex: 50%;
+      padding-right: 40px;
     }
   }
 }

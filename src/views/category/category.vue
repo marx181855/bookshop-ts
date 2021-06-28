@@ -164,7 +164,8 @@ export default defineComponent({
         },
       });
       betterScroll.on("scroll", (position) => {
-        state.isShowBackToTopIcon = -position > 300
+        console.log(position)
+        state.isShowBackToTopIcon = -position.y > 300
       });
       betterScroll.on("pullingUp", pullingUpHandler);
     };

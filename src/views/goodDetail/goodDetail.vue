@@ -7,13 +7,14 @@
       @click-left="$router.go(-1)"
     />
     <div class="box">
-      <van-image
+      <img v-lazy="detail.cover_url" alt="图片" />
+      <!-- <van-image
         width="375"
         fit="contain"
         :src="detail.cover_url"
         lazy-load
         height="375"
-      />
+      /> -->
       <van-card
         style="text-align: left"
         :num="detail.stock"
@@ -75,6 +76,7 @@ import {
   onMounted,
   toRefs,
   onActivated,
+  watch,
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -129,6 +131,13 @@ export default defineComponent({
     };
     onMounted(() => {
       initData();
+      watch(route, () => {
+        console.log(route);
+        if (route.query.id) {
+          console.log(goodID.value, route.query.id);
+          initData();
+        }
+      });
     });
     // 收藏
     const handleCollect = () => {
@@ -171,12 +180,13 @@ export default defineComponent({
         }
       });
     };
-    onActivated(() => {
-      initData();
+    // onActivated(() => {
+    //   initData();
 
-      console.log("我是商品", route.query.id);
-      console.log(book.detail);
-    });
+    //   console.log("我是商品", route.query.id);
+    //   console.log(book.detail);
+    // });
+
     return {
       ...toRefs(book),
       currentTab,
@@ -197,9 +207,8 @@ export default defineComponent({
   bottom: 50px;
   left: 0;
   right: 0;
-  .van-image {
-    width: 375px;
-    height: 375px;
+  img {
+    width: 100%;
   }
   .content {
     padding: 10px;

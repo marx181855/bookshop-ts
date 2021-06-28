@@ -1,6 +1,6 @@
 <template>
-  <router-view v-slot="{ Component }">
-    <keep-alive :exclude="[]">
+  <router-view v-slot="{ Component }" v-if="routerState">
+    <keep-alive :exclude="['goodDetail']">
       <component :is="Component" />
     </keep-alive>
   </router-view>
@@ -23,12 +23,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
+import { defineComponent, ref, watch, onMounted, provide, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
+import router from "./router";
 
 export default defineComponent({
   setup() {
+    const routerState = ref(true);
+    const reload = {
+      reload() {
+        routerState.value = false;
+        nextTick(() => {
+          routerState.value = true;
+        });
+      },
+    };
+    provide("reload", reload);
+
     const route = useRoute();
     const currentPath = ref("/");
     watch(route, () => {
@@ -45,6 +57,7 @@ export default defineComponent({
     });
     return {
       currentPath,
+      routerState,
     };
   },
 });

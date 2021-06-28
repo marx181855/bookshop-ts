@@ -27,17 +27,7 @@
             </van-swipe>
           </div>
           <div class="recommend">
-            <van-grid :gutter="10" icon-size="65px">
-              <van-grid-item
-                v-for="(item, index) in recommendData.slice(0, 4)"
-                :key="index"
-                :icon="item.cover_url"
-                :text="item.title"
-                @click="
-                  $router.push({ path: '/goodDetail', query: { id: item.id } })
-                "
-              />
-            </van-grid>
+            <recommendGoods :list="recommendData.slice(0, 4)"></recommendGoods>
           </div>
         </div>
         <div class="tab">
@@ -76,12 +66,14 @@ import BScroll from "@better-scroll/core";
 import MouseWheel from "@better-scroll/mouse-wheel";
 import Pullup from "@better-scroll/pull-up";
 BScroll.use(MouseWheel).use(Pullup);
+import recommendGoods from "components/recommendGoods.vue"
 import goodsList from "components/goodsList.vue";
 import backToTop from "components/backToTop.vue";
 import { getHomeAllData, getHomeGoods } from "api/home";
 
 export default defineComponent({
   components: {
+    recommendGoods,
     goodsList,
     backToTop,
   },
