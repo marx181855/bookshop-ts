@@ -189,7 +189,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .box {
   overflow: auto;
   position: fixed;

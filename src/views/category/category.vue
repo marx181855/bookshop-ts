@@ -107,6 +107,7 @@ export default defineComponent({
       return function () {
         let firstTriggle = !timer
         if (firstTriggle) {
+          // func.apply(this, arguments)
           func()
         }
         if (timer) {
@@ -119,10 +120,10 @@ export default defineComponent({
     }
 
     const onSearch = debounce(() => {
-      console.log('搜索中', state.searchKeyword.value)
-      searchProduct(state.searchKeyword.value, state.currentActiveTab).then((res) => {
+      console.log('搜索中', state.searchKeyword)
+      searchProduct(state.searchKeyword, state.currentActiveTab).then((res) => {
         console.log(res)
-        state.goodsData[state.currentActiveTab].list = res.state.goodsData.data
+        state.goodsData[state.currentActiveTab].list = res.goods.data
       })
     }, 2000)
 
@@ -220,7 +221,7 @@ export default defineComponent({
     const backToTop = () => {
       betterScroll.scrollTo(0, 0, 500)
     }
-    
+
     return {
       ...toRefs(state),
       onSearch,

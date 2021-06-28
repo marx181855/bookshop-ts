@@ -35,3 +35,10 @@ export function getAddressDetail(id:number) {
     url: `/api/address/${id}`
   })
 }
+
+export function setDefaultAddress(id: number) {
+  return request({
+    url: `/api/address/${id}/default`,
+    method: 'patch'
+  })
+}

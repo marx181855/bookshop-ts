@@ -22,7 +22,7 @@
 
 <script>
 
-import { defineComponent, reactive, toRefs, onMounted, computed } from 'vue'
+import { defineComponent, reactive, toRefs, onMounted, computed, onActivated } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { areaList } from '@vant/area-data'
 
@@ -52,7 +52,7 @@ export default defineComponent({
       addressId: '',
       title: ''
     })
-    onMounted(() => {
+    const initData = () => {
       state.areaList = areaList
       console.log(areaList)
 
@@ -87,6 +87,12 @@ export default defineComponent({
           Toast.clear()
         })
       }
+    }
+    onActivated(()=> {
+      initData()
+    })
+    onMounted(() => {
+      initData()
     })
     const title = computed(() => {
       return state.type === 'add' ? '新增地址' : '编辑地址'

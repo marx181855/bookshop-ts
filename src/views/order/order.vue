@@ -81,7 +81,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .box {
   position: fixed;
   top: 45px;

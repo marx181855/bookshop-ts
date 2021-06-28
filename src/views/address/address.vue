@@ -14,9 +14,9 @@
         v-model="chosenAddressId"
         :list="list"
         default-tag-text="默认"
-        @add="onAdd"
-        @edit="onEdit"
-        @select="select"
+        @add="addAddress"
+        @edit="editAddress"
+        @select="selectAddress"
       />
     </div>
   </div>
@@ -26,21 +26,21 @@
 import { useRouter } from 'vue-router'
 import { defineComponent, onMounted, reactive, toRefs } from 'vue'
 import { Toast } from 'vant'
-import { getAddressList } from 'api/address'
+import { getAddressList, setDefaultAddress } from 'api/address'
 
 export default defineComponent({
-
   setup() {
-    // const route = useRoute()
     const router = useRouter()
     const state = reactive({
       chosenAddressId: '1',
       list: []
     })
-    onMounted(() => {
+    const initData = () => {
       Toast.loading('数据加载中...')
       getAddressList().then((res) => {
-        Toast.clear()
+        state.chosenAddressId = res.data.filter((item) => {
+          return item.is_default === 1
+        })[0].id
         if (res.data.length === 0) {
           state.list = []
           return false
@@ -55,9 +55,15 @@ export default defineComponent({
           }
         })
       })
+      Toast.clear()
+
+    }
+    onMounted(() => {
+      initData()
+
     })
 
-    const onAdd = () => {
+    const addAddress = () => {
       router.push({
         path: '/addressedit',
         query: {
@@ -65,22 +71,26 @@ export default defineComponent({
         }
       })
     }
-    const onEdit = (item) => {
+    const editAddress = (item) => {
       console.log(item)
       router.push({
         path: '/addressedit',
         query: { type: 'edit', addressId: item.id }
       })
     }
-    const select = (item) => {
-      router.push({ path: 'createorder', query: { addressId: item.id } })
+    const selectAddress = (item) => {
+      console.log('selectAddress', item)
+      setDefaultAddress(item.id).then(res => {
+        console.log(res)
+      })
+      // router.push({ path: 'createorder', query: { addressId: item.id } })
     }
 
     return {
       ...toRefs(state),
-      onAdd,
-      onEdit,
-      select
+      addAddress,
+      editAddress,
+      selectAddress
     }
   }
 })
